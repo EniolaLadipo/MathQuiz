@@ -1,5 +1,3 @@
-package MyMathQuiz;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -13,6 +11,7 @@ public class MQ{
         mainFrame = new JFrame("Math Quiz");
         mainPanel = new JPanel(new GridBagLayout());
         label = new JLabel("Welcome to the Math Quiz");
+        label.setFont(new Font("TimesRoman",Font.BOLD,30));
 
         mainPanel.add(label);
         mainFrame.add(mainPanel);
