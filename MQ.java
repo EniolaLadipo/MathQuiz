@@ -7,6 +7,10 @@ public class MQ{
     JPanel mainPanel;
     JLabel label;
 
+    public void makeMainPanel(){
+        
+    }
+
     public void makeMainFrame(){
         mainFrame = new JFrame("Math Quiz");
         mainPanel = new JPanel(new GridBagLayout());
