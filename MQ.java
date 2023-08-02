@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -21,7 +23,22 @@ public class MQ{
 
         public void makeQuizPanel(){
             resetGBC();
+
+            inputBox = new JTextField();
+            inputBox.setPreferredSize(new Dimension(120, 30));
+            inputBox.setHorizontalAlignment(SwingConstants.CENTER);
+            inputBox.setFont(new Font("SansSerif",Font.BOLD,18));
+
+            scorePanel = new JPanel(new BorderLayout());
+            scorePanel.setBorder(new EmptyBorder(30, 30, 0, 30));
+
+
+
+
+
             quizPanel = new JPanel(new GridBagLayout());
+
+
 
 
         }
