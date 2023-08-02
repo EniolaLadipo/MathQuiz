@@ -7,14 +7,36 @@ public class MQ{
     JPanel mainPanel;
     JLabel welcome;
     JButton addition, subtraction, multiplication, division;
+    GridBagConstraints gbc = new GridBagConstraints();
 
-    public void makeMainPanel(){
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10,10,10,10);
+    abstract class ArithQ{
+        JPanel quizPanel, scorePanel, dataPanel;
+        JButton check, retry;
+        JTextField inputBox;
+        JLabel mathQuestion, dataLabel;
+
+        public void nameFrame();
+
+        public void generate();
+
+        public void makeQuizPanel(){
+            resetGBC();
+            quizPanel = new JPanel(new GridBagLayout());
+
+
+        }
+    }
+
+    public void resetGBC(){
         gbc.gridx = 0;
         gbc.gridy = 0;
+    }
 
-        mainFrame = new JFrame("Math Quiz");
+    public void makeMainPanel(){
+        resetGBC();
+        gbc.insets = new Insets(10,10,10,10);
+
+        mainFrame = new JFrame("Math Quiz Menu");
         mainPanel = new JPanel(new GridBagLayout());
         welcome = new JLabel("Welcome to the Math Quiz");
         welcome.setFont(new Font("TimesRoman",Font.BOLD,30));
