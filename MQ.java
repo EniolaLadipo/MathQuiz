@@ -1,10 +1,10 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Random;
 
+//Main class for Math Quiz
 public class MQ{
     JFrame mainFrame;
     JPanel mainPanel;
@@ -13,23 +13,39 @@ public class MQ{
     GridBagConstraints gbc = new GridBagConstraints();
     Random random = new Random();
 
+    //Abstract class containing the panel and logic for each operation quiz
     abstract class ArithQ{
         JPanel quizPanel, scorePanel, dataPanel;
         JButton check, retry;
         JTextField inputBox;
-        JLabel dataLabel;
+        JLabel positive, negative, dataLabel;
         int n1, n2, result, answer;
         JLabel mathQuestion = new JLabel("");
+        int positiveCounter = 0;
+        int negativeCounter = 0;
+        int addLimit = 101;
+        int subLimit = 101;
+        int multLimit = 25;
+        int divLimit = 101;
 
+        //This method will change the title of the fram depending on the type of quiz being done
         public abstract void nameFrame();
 
+        //This method will set the math question to the appropriate operation depending on the quiz selected
         public abstract void generate();
+
+        public void resetQuestion(int limit){
+            n1 = random.nextInt(limit);
+            n2 = random.nextInt(limit);
+        }
 
         public void makeQuizPanel(){
             nameFrame();
             generate();
             resetGBC();
             gbc.insets = new Insets(5,5,5,5);
+
+            mathQuestion.setFont(new Font("SansSerif",Font.BOLD,35));
 
             inputBox = new JTextField();
             inputBox.setPreferredSize(new Dimension(120, 30));
@@ -39,16 +55,21 @@ public class MQ{
             scorePanel = new JPanel(new BorderLayout());
             scorePanel.setBorder(new EmptyBorder(30, 30, 0, 30));
 
-            JLabel positive = new JLabel("Correct: ");
+            positive = new JLabel("Correct: ");
             positive.setForeground(Color.GREEN);
-            JLabel negative = new JLabel("Incorrect: ");
+            positive.setFont(new Font("SansSerif",Font.BOLD,25));
+
+            negative = new JLabel("Incorrect: ");
             negative.setForeground(Color.RED);
+            negative.setFont(new Font("SansSerif",Font.BOLD,25));
 
             scorePanel.add(positive,BorderLayout.WEST);
             scorePanel.add(negative,BorderLayout.EAST);
 
             quizPanel = new JPanel(new GridBagLayout());
+
             check = new JButton("Check");
+            check.addActionListener(e -> check());
 
             quizPanel.add(mathQuestion,gbc);
             gbc.gridy++;
@@ -63,6 +84,25 @@ public class MQ{
             mainFrame.add(quizPanel,BorderLayout.CENTER);
             restartFrame();
         }
+
+        public void check(){
+            if(inputBox.getText().isEmpty()){
+                negativeCounter++;
+                inputBox.setText("");
+            }  else {
+                answer = Integer.parseInt(inputBox.getText());
+                inputBox.setText("");
+
+                if(answer == result){
+                    positiveCounter++;
+                    positive.setText("Correct: " + positiveCounter);
+                } else {
+                    negativeCounter++;
+                    negative.setText("Incorrect: " + negativeCounter);
+                }
+            }
+            generate();
+        }
     }
 
     class Addition extends ArithQ{
@@ -70,13 +110,56 @@ public class MQ{
             mainFrame.setTitle("Math Quiz - Addition");
         }
         public void generate(){
-            n1 = random.nextInt(51);
-            n2 = random.nextInt(51);
+            resetQuestion(addLimit);
             result = n1 + n2;
             mathQuestion.setText(n1 + " + " + n2);
         }
-
         public Addition(){
+            makeQuizPanel();
+        }
+    }
+    class Subtraction extends ArithQ{
+        public void nameFrame(){
+            mainFrame.setTitle("Math Quiz - Subtraction");
+        }
+        public void generate(){
+            resetQuestion(subLimit);
+            while(n2 > n1){
+                resetQuestion(subLimit);
+            }
+            result = n1 - n2;
+            mathQuestion.setText(n1 + " - " + n2);
+        }
+        public Subtraction(){
+            makeQuizPanel();
+        }
+    }
+    class Multiplication extends ArithQ{
+        public void nameFrame(){
+            mainFrame.setTitle("Math Quiz - Multiplication");
+        }
+        public void generate(){
+            resetQuestion(multLimit);
+            result = n1 * n2;;
+            mathQuestion.setText(n1 + " x " + n2);
+        }
+        public Multiplication(){
+            makeQuizPanel();
+        }
+    }
+    class Division extends ArithQ{
+        public void nameFrame(){
+            mainFrame.setTitle("Math Quiz - Division");
+        }
+        public void generate(){
+            resetQuestion(divLimit);
+            while(n1 % n2 != 0){
+                resetQuestion(addLimit);
+            }
+            result = n1 / n2;
+            mathQuestion.setText(n1 + "\u00F7" + n2);
+        }
+        public Division(){
             makeQuizPanel();
         }
     }
