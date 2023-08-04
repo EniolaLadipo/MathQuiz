@@ -17,8 +17,9 @@ public class MQ{
         JPanel quizPanel, scorePanel, dataPanel;
         JButton check, retry;
         JTextField inputBox;
-        JLabel mathQuestion, dataLabel;
+        JLabel dataLabel;
         int n1, n2, result, answer;
+        JLabel mathQuestion = new JLabel("");
 
         public abstract void nameFrame();
 
@@ -47,7 +48,6 @@ public class MQ{
             scorePanel.add(negative,BorderLayout.EAST);
 
             quizPanel = new JPanel(new GridBagLayout());
-            mathQuestion = new JLabel("");
             check = new JButton("Check");
 
             quizPanel.add(mathQuestion,gbc);
@@ -63,7 +63,6 @@ public class MQ{
             mainFrame.add(quizPanel,BorderLayout.CENTER);
             restartFrame();
         }
-
     }
 
     class Addition extends ArithQ{
