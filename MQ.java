@@ -241,7 +241,7 @@ public class MQ{
         initialiseFrame();
         makeMainPanel();
         mainFrame.add(mainPanel);
-        mainFrame.setSize(450,450);
+        mainFrame.setSize(650,500);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -253,6 +253,7 @@ public class MQ{
     public void backToMenu(){
         clearFrame();
         mainFrame.setTitle("Math Quiz - Menu");
+        makeMainPanel();
         mainFrame.add(mainPanel);
         restartFrame();
     }
