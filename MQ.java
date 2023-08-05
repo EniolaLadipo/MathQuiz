@@ -16,18 +16,16 @@ public class MQ{
     //Abstract class containing the panel and logic for each operation quiz
     abstract class ArithQ{
         JPanel quizPanel, scorePanel, dataPanel;
-        JButton check, retry;
+        JButton check, retry, close;
         JTextField inputBox;
         JLabel positive, negative, dataLabel;
         int n1, n2, result, answer;
         JLabel mathQuestion = new JLabel("");
-        int positiveCounter = 0;
-        int negativeCounter = 0;
+        int positiveCounter = 0, negativeCounter = 0, quizCounter = 0;
         int addLimit = 101;
         int subLimit = 101;
         int multLimit = 25;
         int divLimit = 101;
-
         //This method will change the title of the fram depending on the type of quiz being done
         public abstract void nameFrame();
 
@@ -43,9 +41,11 @@ public class MQ{
             nameFrame();
             generate();
             resetGBC();
+            Font fontForScores = new Font("SansSerif",Font.BOLD,19);
             gbc.insets = new Insets(5,5,5,5);
 
-            mathQuestion.setFont(new Font("SansSerif",Font.BOLD,35));
+            mathQuestion.setFont(new Font("SansSerif",Font.BOLD,30));
+            mathQuestion.setBorder(new EmptyBorder(0, 0, 20, 0));
 
             inputBox = new JTextField();
             inputBox.setPreferredSize(new Dimension(120, 30));
@@ -57,11 +57,11 @@ public class MQ{
 
             positive = new JLabel("Correct: ");
             positive.setForeground(Color.GREEN);
-            positive.setFont(new Font("SansSerif",Font.BOLD,25));
+            positive.setFont(fontForScores);
 
             negative = new JLabel("Incorrect: ");
             negative.setForeground(Color.RED);
-            negative.setFont(new Font("SansSerif",Font.BOLD,25));
+            negative.setFont(fontForScores);
 
             scorePanel.add(positive,BorderLayout.WEST);
             scorePanel.add(negative,BorderLayout.EAST);
@@ -89,6 +89,7 @@ public class MQ{
             if(inputBox.getText().isEmpty()){
                 negativeCounter++;
                 inputBox.setText("");
+                negative.setText("Incorrect: " + negativeCounter);
             }  else {
                 answer = Integer.parseInt(inputBox.getText());
                 inputBox.setText("");
@@ -101,7 +102,36 @@ public class MQ{
                     negative.setText("Incorrect: " + negativeCounter);
                 }
             }
-            generate();
+            
+            quizCounter++;
+            if(quizCounter == 3){
+                makeDataPanel();
+            } else {
+                generate();
+            }
+        }
+
+        public void makeDataPanel(){
+            resetGBC();
+            dataPanel = new JPanel(new GridBagLayout());
+            dataLabel = new JLabel("<html>You got <font color='green'>" + positiveCounter + "</font> correct and <font color='red'>" + negativeCounter + "</font> wrong</html>");
+            dataLabel.setFont(new Font("SansSerif",Font.BOLD,17));
+
+            dataPanel.add(dataLabel,gbc);
+            gbc.gridy++;
+
+            retry = new JButton("Try Again");
+            retry.addActionListener(e -> backToMenu());
+            dataPanel.add(retry,gbc);
+            gbc.gridy++;
+            
+            close = new JButton("Close");
+            close.addActionListener(e -> exitQuiz());
+            dataPanel.add(close,gbc);
+            
+            clearFrame();
+            mainFrame.add(dataPanel);
+            restartFrame();
         }
     }
 
@@ -180,8 +210,6 @@ public class MQ{
     public void makeMainPanel(){
         resetGBC();
         gbc.insets = new Insets(10,10,10,10);
-
-        mainFrame = new JFrame("Math Quiz Menu");
         mainPanel = new JPanel(new GridBagLayout());
         welcome = new JLabel("Welcome to the Math Quiz");
         welcome.setFont(new Font("TimesRoman",Font.BOLD,30));
@@ -195,23 +223,42 @@ public class MQ{
         gbc.gridy++;
 
         subtraction = new JButton("Subtraction");
+        subtraction.addActionListener(e -> new Subtraction());
         mainPanel.add(subtraction,gbc);
         gbc.gridy++;
 
         multiplication = new JButton("Multiplication");
+        multiplication.addActionListener(e -> new Multiplication());
         mainPanel.add(multiplication,gbc);
         gbc.gridy++;
 
         division = new JButton("Division");
+        division.addActionListener(e -> new Division());
         mainPanel.add(division,gbc);
     }
 
     public void makeMainFrame(){
+        initialiseFrame();
         makeMainPanel();
         mainFrame.add(mainPanel);
         mainFrame.setSize(450,450);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    public void initialiseFrame(){
+        mainFrame = new JFrame("Math Quiz - Menu");
+    }
+
+    public void backToMenu(){
+        clearFrame();
+        mainFrame.setTitle("Math Quiz - Menu");
+        mainFrame.add(mainPanel);
+        restartFrame();
+    }
+    
+    public void exitQuiz(){
+        mainFrame.dispose();
     }
     
     public MQ(){
